@@ -163,8 +163,8 @@ if __name__ == '__main__':
             attributes = []
             for i in range(2, len(sys.argv), 2) : attributes.append((sys.argv[i], sys.argv[i+1]))
             overloaded = input('Generate builder overloaded (Y/n):') != 'n'
-            inline = input('Generate class inline (Y/n):') == 'n'
-            output += generate_class(sys.argv[1], attributes, inline, overloaded)
+            offline = input('Generate class inline (Y/n):') == 'n'
+            output += generate_class(sys.argv[1], attributes, offline, overloaded)
             print("\nThe result of the class is as follows\n\n" + output)
         else:
             output += "Error: Command or not give anyone atribute for class " + sys.argv[1]
@@ -174,6 +174,6 @@ if __name__ == '__main__':
         name_class = input('Name class: ')
         while input('Create a new variable (Y/n):') != 'n': attributes.append((input('Type: '), input('Name: ')))
         overloaded = input('Generate builder overloaded (Y/n):') != 'n'
-        inline = input('Generate class inline (Y/n):') == 'n'
-        output += generate_class(name_class, attributes, inline, overloaded)
+        offline = input('Generate class inline (Y/n):') == 'n'
+        output += generate_class(name_class, attributes, offline, overloaded)
         print("\nThe result of the class is as follows\n\n" + output)
