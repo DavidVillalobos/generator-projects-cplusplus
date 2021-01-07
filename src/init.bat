@@ -19,12 +19,12 @@ ECHO.   3. Exit
 ECHO.  + - - - - - - - - - - - - - - - +
 
 set choice=
-set /p choice= Enter an option:
+set /p choice= Enter an option :
 if not '%choice%'=='' set choice=%choice:~0,1%
 if '%choice%'=='1' goto CreateClassC++
 if '%choice%'=='2' goto CreateMakefile
 if '%choice%'=='3' goto Exit
-ECHO "%choice%" Opcion incorrecta.
+ECHO "%choice%" Option wrong.
 pause
 ECHO.
 goto Start
