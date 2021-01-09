@@ -1,4 +1,4 @@
-# Class Generator
+# Generator of Projects C++ 
 
 The purpose of this project is to optimize the process of implementing projects in C ++, 
 allowing to create classes quickly, implementing the body and the basic methods of the classes 
