@@ -169,7 +169,7 @@ if __name__ == '__main__':
             output += generate_class(sys.argv[1], attributes, offline, overloaded)
             print("\nThe result of the class is as follows\n\n" + output)
         else:
-            output += "Error: Command or not give anyone atribute for class " + sys.argv[1]
+            output += "Error: Not give anyone atribute for class " + sys.argv[1]
     else:
         print('Creating c++ class with console interactive')
         attributes = []
