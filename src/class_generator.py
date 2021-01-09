@@ -1,6 +1,6 @@
 """ File: generateClass.py
     Version: 1.0.2
-    Date: 05-01-2021 
+    Date: 09-01-2021 
     Author: David Villalobos
     Description: With this file you can 
     generate c++ classes implementing 
