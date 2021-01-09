@@ -23,7 +23,7 @@ def version(): return 'V1.0.0.'
 
 def generate_makefile(main, classes, out, flags, targets):
     makefile = 'OBJS = ' + main + '.o ' + '.o '.join(classes) + '.o\n'
-    makefile += 'SOURCE = ' + main + '.cpp\n'
+    makefile += 'SOURCE = ' + main + '.cpp ' + '.cpp '.join(classes) + '.cpp\n'
     makefile += 'HEADER = ' + '.h '.join(classes) + '.h\n'
     makefile += 'OUT = ' + out + '.exe\n'
     makefile += 'CC = g++\n'
