@@ -4,8 +4,8 @@ The purpose of this project is to optimize the process of implementing projects 
 
 [Python](https://www.python.org/) minimum the 3 version
 ## Installation
-Only need to download a file class_generator.py from this 
-Download with Curl:
+Only need to download a file class_generator.py from this repository  
+You can download it with curl like:  
 ```bash
 curl https://raw.githubusercontent.com/DavidVillalobos/Class_Generator/master/src/class_generator.py --output class_generator.py
 ```
