@@ -1,6 +1,6 @@
 """ File: generateMakefiles.py
-    Version: 1.0.0
-    Date: 09-01-2021 
+    Version: 1.0.1
+    Date: 16-01-2021 
     Author: David Villalobos
     Description: With this file you can 
     generate makefiles for build C++ projects
@@ -19,12 +19,12 @@ def help():
         makefile_generator.py [main] [out] [name_class_1] [name_class_2] ...
         """
 
-def version(): return 'V1.0.0.'
+def version(): return 'V1.0.1'
 
 def generate_makefile(main, classes, out, flags, targets):
-    makefile = 'OBJS = ' + main + '.o ' + '.o '.join(classes) + '.o\n'
-    makefile += 'SOURCE = ' + main + '.cpp ' + '.cpp '.join(classes) + '.cpp\n'
-    makefile += 'HEADER = ' + '.h '.join(classes) + '.h\n'
+    makefile = 'OBJS = ' + main + '.o ' + '.o '.join(classes) + ('.o\n' if 0 < len(classes) else '\n')
+    makefile += 'SOURCE = ' + main + '.cpp ' + '.cpp '.join(classes) + ('.cpp\n' if 0 < len(classes) else '\n')
+    makefile += 'HEADER = ' + '.h '.join(classes) + ('.h\n' if 0 < len(classes) else '\n')
     makefile += 'OUT = ' + out + '.exe\n'
     makefile += 'CC = g++\n'
     makefile += 'FLAGS = -c ' 
