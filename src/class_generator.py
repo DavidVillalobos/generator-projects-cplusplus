@@ -138,7 +138,7 @@ def generate_class(name_class, attributes, offline = False, builder_overloaded =
     declaration += generate_destructor(name_class, offline, offline)
     declaration += '};\n'
     declaration += '#endif //!%s_H \n\n' % name_class.upper();
-    path = os.getenv('DESKTOP') + "\\" + name_class
+    path = 'C:\\Users\\' + os.getenv('username') + '\\Desktop\\' + name_class
     # print("THE PATH IS IN ", path)
     with open ('%s.h' % path, 'w') as h_file:
         h_file.write(declaration)

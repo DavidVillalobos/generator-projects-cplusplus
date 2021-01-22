@@ -45,7 +45,7 @@ def generate_makefile(main, classes, out, flags, targets):
     if targets['run']: 
         makefile += 'run: $(OUT)\n'
         makefile += '\t$(OUT)\n'
-    path = os.getenv('DESKTOP') + "\\" + 'Makefile'
+    path = 'C:\\Users\\' + os.getenv('username') + '\\Desktop\\Makefile'
     with open (path, 'w') as file:
         file.write(makefile)
     file.close()
