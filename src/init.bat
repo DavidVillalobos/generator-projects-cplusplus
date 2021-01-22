@@ -15,7 +15,8 @@ ECHO.      Generator of projects [95mC++[0m
 ECHO.                                 
 ECHO.          1. [92mCreate Class[0m
 ECHO.          2. [94mCreate Makefile[0m          
-ECHO.          3. [91mExit                      
+ECHO.          3. [93mCreate Main[0m          
+ECHO.          4. [91mExit                      
 ECHO.  [0m+ - - - - - - - - - - - - - - - +
 
 set choice=
@@ -23,7 +24,8 @@ set /p choice= Enter an option :
 if not '%choice%'=='' set choice=%choice:~0,1%
 if '%choice%'=='1' goto CreateClassC++
 if '%choice%'=='2' goto CreateMakefile
-if '%choice%'=='3' goto Exit
+if '%choice%'=='3' goto CreateMain
+if '%choice%'=='4' goto Exit
 ECHO "%choice%" Option wrong.
 pause
 ECHO.
@@ -35,6 +37,10 @@ goto Start
 
 :CreateMakefile
 python "makefile_generator.py"
+goto Start
+
+:CreateMain
+REM genmain c++
 goto Start
 
 :Exit
