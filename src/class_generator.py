@@ -1,6 +1,6 @@
 """ File: generateClass.py
-    Version: 1.0.2
-    Date: 09-01-2021 
+    Version: 1.0.3
+    Date: 10-02-2021 
     Author: David Villalobos
     Description: With this file you can 
     generate c++ classes implementing 
@@ -138,9 +138,8 @@ def generate_class(name_class, attributes, offline = False, builder_overloaded =
     declaration += generate_destructor(name_class, offline, offline)
     declaration += '};\n'
     declaration += '#endif //!%s_H \n\n' % name_class.upper();
-    path = 'C:\\Users\\' + os.getenv('username') + '\\Desktop\\' + name_class
-    # print("THE PATH IS IN ", path)
-    with open ('%s.h' % path, 'w') as h_file:
+    path = os.getenv('userprofile') + '\\Desktop\\' + name_class
+    with open (path + '.h', 'w') as h_file:
         h_file.write(declaration)
     h_file.close()    
     if offline:
@@ -149,7 +148,7 @@ def generate_class(name_class, attributes, offline = False, builder_overloaded =
         implementation += generate_gets(attributes, name_class, False, offline)
         implementation += generate_sets(attributes, name_class, False, offline)
         implementation += generate_destructor(name_class, False, offline)
-        with open ('%s.cpp' % path, 'w') as cpp_file:
+        with open (path + '.cpp', 'w') as cpp_file:
             cpp_file.write(implementation)
         cpp_file.close()
         declaration += implementation
