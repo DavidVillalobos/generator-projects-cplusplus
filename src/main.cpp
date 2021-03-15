@@ -68,7 +68,7 @@ void generate_main(){
     std::string name;
     std::cout<<"File name: ";
     std::cin>>name; 
-    if (name.find(".cpp") == std::string::npos) {
+    if (name.find(".cpp") == std::string::npos) { // not find .cpp
         name += ".cpp";
     }
     std::string path = std::string(getenv("userprofile")) + "\\Desktop\\" + name;
