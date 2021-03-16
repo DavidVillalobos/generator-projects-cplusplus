@@ -1,7 +1,7 @@
 /*
     File: generateMakefiles.cpp
     Version: 2.0.0
-    Date: 15-03-2021 
+    Date: 16-03-2021 
     Author: David Villalobos
     Description: With this file you can 
     generate makefiles for build C++ projects
@@ -14,61 +14,18 @@
 
 #define VERSION "GenMakeC++ V2.0.0"
 
-std::string help(){
-    std::stringstream s;
-    s << "[Generator of Makefiles for C++]\n";
-    s << "Author: https://github.com/DavidVillalobos \n"; 
-    s << "Usages:\n"; 
-    s << "* Interactive console \n"; 
-    s << "    makefile_generator \n"; 
-    s << "* Through arguments \n";  
-    s << "    makefile_generator [main] [out] [name_class_1] [name_class_2] ...";
-    return s.str();
-}
+// Get help like -h or -help
+std::string help();
 
-std::string displayList(std::list<std::string> list, std::string separator = " "){
-    std::stringstream r;
-    for (auto i : list){
-        r << i << separator;
-    }
-    return r.str();
-}
+// Display a list elements like string concatenate with a separator 
+std::string displayList(std::list<std::string> &list, std::string separator = " ");
 
-std::string compileTargetFiles(std::list<std::string> list){
-    std::stringstream r;
-    for (auto i : list){
-        r << i + ".o: " + i + ".cpp\n\t$(CC) $(FLAGS) " + i + ".cpp\n\n";
-    }
-    return r.str();
-}
+// generate the targets to compile each file in list
+std::string compileTargetFiles(std::list<std::string> list);
 
-std::string generate_makefile(std::string main, std::list<std::string> classes, 
-std::string out, std::string flags, std::string lflags, bool clean, bool run){
-    std::stringstream makefile;
-    makefile << "OBJS = " + main + ".o " + displayList(classes, ".o ") + '\n';
-    makefile << "SOURCE = " + main + ".cpp " + displayList(classes, ".cpp ") + '\n';
-    makefile << "HEADER = " + displayList(classes, ".h ") + '\n';
-    makefile << "OUT = " + out + ".exe\n";
-    makefile << "CC = g++\n";
-    makefile << "FLAGS = -c " + flags + '\n';
-    makefile << "LFLAGS = " + lflags + "\n\n"; 
-    makefile << "all: $(OBJS)\n";
-    makefile << "\t$(CC) -g $(OBJS) -o $(OUT) $(LFLAGS)\n\n";
-    makefile << main + ".o: " + main + ".cpp\n";
-    makefile << "\t$(CC) $(FLAGS) " + main + ".cpp\n\n";
-    makefile << compileTargetFiles(classes);
-    if(clean){
-        makefile << "clean:\n\tdel $(OBJS) $(OUT)\n\n";
-    } 
-    if(run){
-        makefile << "run: $(OUT)\n\t$(OUT)\n";
-    } 
-    std::string path = std::string(getenv("userprofile")) + "\\Desktop\\Makefile";
-    std::ofstream file(path);
-    file << makefile.str();
-    file.close();
-    return makefile.str();
-}
+// generate the makefile according to main.cpp, classes.h out.exe, flags and library flags, clean and run target
+std::string generate_makefile(std::string &main, std::list<std::string> &classes, 
+std::string &out, std::string flags, std::string lflags, bool clean, bool run);
 
 int main(int argc, char** argv){
     if (argc > 1){
@@ -139,4 +96,60 @@ int main(int argc, char** argv){
         std::cout << "\nThe result of the makefile is as follows\n\n";
         std::cout << generate_makefile(main, classes, out, flags, lflags, clean, run);
     }
+}
+
+std::string help(){
+    std::stringstream s;
+    s << "[Generator of Makefiles for C++]\n";
+    s << "Author: https://github.com/DavidVillalobos \n"; 
+    s << "Usages:\n"; 
+    s << "* Interactive console \n"; 
+    s << "    makefile_generator \n"; 
+    s << "* Through arguments \n";  
+    s << "    makefile_generator [main] [out] [name_class_1] [name_class_2] ...";
+    return s.str();
+}
+
+std::string displayList(std::list<std::string> &list, std::string separator = " "){
+    std::stringstream r;
+    for (auto i : list){
+        r << i << separator;
+    }
+    return r.str();
+}
+
+std::string compileTargetFiles(std::list<std::string> list){
+    std::stringstream r;
+    for (auto i : list){
+        r << i + ".o: " + i + ".cpp\n\t$(CC) $(FLAGS) " + i + ".cpp\n\n";
+    }
+    return r.str();
+}
+
+std::string generate_makefile(std::string &main, std::list<std::string> &classes, 
+std::string &out, std::string flags, std::string lflags, bool clean, bool run){
+    std::stringstream makefile;
+    makefile << "OBJS = " + main + ".o " + displayList(classes, ".o ") + '\n';
+    makefile << "SOURCE = " + main + ".cpp " + displayList(classes, ".cpp ") + '\n';
+    makefile << "HEADER = " + displayList(classes, ".h ") + '\n';
+    makefile << "OUT = " + out + ".exe\n";
+    makefile << "CC = g++\n";
+    makefile << "FLAGS = -c " + flags + '\n';
+    makefile << "LFLAGS = " + lflags + "\n\n"; 
+    makefile << "all: $(OBJS)\n";
+    makefile << "\t$(CC) -g $(OBJS) -o $(OUT) $(LFLAGS)\n\n";
+    makefile << main + ".o: " + main + ".cpp\n";
+    makefile << "\t$(CC) $(FLAGS) " + main + ".cpp\n\n";
+    makefile << compileTargetFiles(classes);
+    if(clean){
+        makefile << "clean:\n\tdel $(OBJS) $(OUT)\n\n";
+    } 
+    if(run){
+        makefile << "run: $(OUT)\n\t$(OUT)\n";
+    } 
+    std::string path = std::string(getenv("userprofile")) + "\\Desktop\\Makefile";
+    std::ofstream file(path);
+    file << makefile.str();
+    file.close();
+    return makefile.str();
 }
