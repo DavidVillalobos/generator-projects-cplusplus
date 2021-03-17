@@ -15,7 +15,7 @@ int read_option();
 void generate_main();
 
 int main(){
-    system("mode con: cols=100 lines=25");
+    system("mode con: cols=80 lines=25");
     system("title Generator of Projects C++");
     while(true){
         system("cls");
@@ -40,12 +40,13 @@ int main(){
         std::cout << " [0m+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - +\n";
         std::cout << "   Enter an option : ";
         switch(read_option()){
-            case 1: system("class_generator"); break;
-            case 2: system("makefile_generator"); break;
+            case 1: system("genclassc++"); break;
+            case 2: system("genmakec++"); break;
             case 3: generate_main(); break;
             case 4: return 0;
             default: std::cout << "Option wrong."; break;
         }
+        system("pause");
     }
 }
 
