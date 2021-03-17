@@ -27,7 +27,7 @@ genc++
 ~~~
 
 Enter an option and create your project  
-![Menu](res/menu.png)   
+![MainMenu](demo/mainmenu.png)   
 
 ## Author
 
