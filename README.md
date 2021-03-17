@@ -25,9 +25,9 @@ or open the terminal in project folder and execute the following command:
 cd build
 genc++
 ~~~
+Now enter an option and create your project :D
 
-Enter an option and create your project  
-![MainMenu](demo/mainmenu.png)   
+<img src="demo/mainmenu.png" width="500">  
 
 ## Author
 
