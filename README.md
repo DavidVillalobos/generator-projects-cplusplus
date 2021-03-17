@@ -3,31 +3,27 @@
 The purpose of this project is to optimize the project implementation process in C++,  
 allowing classes to be created quickly. Only attributes are needed to implement the body   
 and basic methods of the classes, methods such as constructors, getter and setter.  
-This project was created with python.
+This project was created with c++.
 
 ### Pre-requirements 📋
 
-* 	[Python](https://www.python.org/) Need minimum the third version
-
+* 	[g++](https://osdn.net/projects/mingw/releases/) 
+	
 ## Installation
 
-Only need to download the four files class_generator.py, makefile_generator.py,  main_generator.py and main.py  
-Each file works independently, you can download the one you require    
-Or download all 4 and use them with the help of the main.py  
-All created files of c++ are stored on the current user's desktop  
-
-## Configuration
-
-1. 	Download the files and place them in the space of your choice.  
-2. 	If you just downloaded Python, make sure the system
-	it recognizes its location in the system path variables (python.exe). 
-
+Download [code](https://github.com/DavidVillalobos/generator-projects-cplusplus/archive/master.zip), and place them in the space of your choice.  
+For build project write the following command inside the project folder:  
+```cmd
+cd generator-projects-cplusplus
+build
+```
 ## Usage  
 
-Open the terminal in proyect folder  
-And run main.py file  
+For use, after build the project, Run the file run.bat
+or open the terminal in project folder and execute the following command:  
 ~~~cmd
-python main.py
+cd build
+genc++
 ~~~
 
 Enter an option and create your project  
