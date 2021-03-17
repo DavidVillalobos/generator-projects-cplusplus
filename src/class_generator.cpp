@@ -25,6 +25,78 @@ std::map<std::string, std::string> Types = {
 	{"double", "0.0"},{"string", "\"\""},{"bool", "false"}
 };
 
+std::string help();
+
+std::string checkIncludes(std::list<std::tuple<std::string,std::string>> &attributes);
+
+std::string generate_attributes(std::list<std::tuple<std::string,std::string>> &attributes);
+
+std::string generate_gets(std::list<std::tuple<std::string,std::string>> &attributes, std::string name_class
+, bool prototype = false, bool offline = false);
+ 
+std::string generate_sets(std::list<std::tuple<std::string,std::string>> &attributes, std::string name_class
+, bool prototype = false, bool offline = false);
+
+std::string generate_constructor(std::list<std::tuple<std::string,std::string>> &attributes, std::string name_class
+, bool prototype = false, bool overloaded = false, bool offline = false);
+
+std::string generate_destructor(std::string name_class, bool prototype = false, bool offline = false);
+
+std::string toUpper(std::string word);
+
+std::string generate_class(std::string name_class, std::list<std::tuple<std::string,std::string>> &attributes
+, bool offline = false, bool builder_overloaded = false);
+
+int main(int argc, char** argv){
+    std::stringstream output;
+    if(argc > 1){
+        if(std::string(argv[1]) == "--help" || std::string(argv[1]) == "-help" || std::string(argv[1]) == "-h"){ 
+            output << help();
+        }else if(std::string(argv[1]) == "--version" || std::string(argv[1]) == "-version" || std::string(argv[1]) == "-v"){
+            output << VERSION;
+        }else if(argc > 3){
+            std::list<std::tuple<std::string, std::string>> attributes;
+            for (int i = 2; i < argc; i+=2){
+                attributes.push_back(std::make_tuple(std::string(argv[i]),std::string(argv[i])));
+            }
+            output << "\nThe result of the class is as follows\n\n";
+            output << generate_class(std::string(argv[1]), attributes, true, false);
+        }else{
+            output << "Error: Not give anyone atribute for class " << argv[1];
+        }
+    }else{
+        std::cout << "Creating c++ class with console interactive\n";
+        std::list<std::tuple<std::string, std::string>> attributes;
+        std::string name_class;        
+        std::cout << "Name class:";
+        getline(std::cin, name_class);
+        std::string type, name, answer;
+        while(true){
+            std::cout << "Create a new variable (Y/n):";
+            getline(std::cin, answer);
+            if(answer == "n"){ break; }
+            std::cout << "Type: ";
+            getline(std::cin, type);
+            std::cout << "Name: ";
+            getline(std::cin, name);
+            attributes.push_back(std::make_tuple(type,name));
+        };
+        bool overloaded, offline;
+        std::cout << "Generate builder overloaded (Y/n):";
+        getline(std::cin, answer);
+        overloaded = answer != "n";
+
+        std::cout << "Generate class inline (Y/n):";
+        getline(std::cin, answer);
+        offline = answer == "n";
+
+        output << "\nThe result of the class is as follows\n\n";
+        output << generate_class(name_class, attributes, offline, overloaded);
+    }
+    std::cout << output.str();
+}
+
+
 std::string help(){
     std::stringstream s;
     s << "[Generator of classes for C++]";
@@ -59,30 +131,30 @@ std::string checkIncludes(std::list<std::tuple<std::string,std::string>> &attrib
 std::string generate_attributes(std::list<std::tuple<std::string,std::string>> &attributes){
     std::stringstream r;
     for (auto attr : attributes){
-        r << '\t' << std::get<0>(attr) << ' ' << std::get<1>(attr) << '\n';
+        r << '\t' << std::get<0>(attr) << ' ' << std::get<1>(attr) << ";\n";
     }
     return r.str();
 }
 
 std::string generate_gets(std::list<std::tuple<std::string,std::string>> &attributes, std::string name_class
-, bool prototype = false, bool offline = false){
+, bool prototype, bool offline){
     std::stringstream gets;
     std::string name_capitalize;
     if(prototype){
         for (auto attr : attributes){
             name_capitalize = std::get<1>(attr);
             name_capitalize[0] = toupper(name_capitalize[0]); // Upper Firt char
-            gets << '\t' << std::get<0>(attr) << "get" << name_capitalize << "();\n";
+            gets << '\t' << std::get<0>(attr) << " get" << name_capitalize << "();\n";
         } 
     }else { 
         std::string space = "";
-        if(!offline){ space = "\t"; }
+        if(!offline){ space = "\t"; name_class = ""; }
         else { name_class += "::"; }
         for (auto attr : attributes){
             name_capitalize = std::get<1>(attr);
             name_capitalize[0] = toupper(name_capitalize[0]); // Upper Firt char
             gets << space << std::get<0>(attr) << ' ' << name_class << "get" << name_capitalize << "(){\n";
-            gets << space << "\treturn " << std::get<0>(attr) << '\n';
+            gets << space << "\treturn " << std::get<1>(attr) << ";\n";
             gets << space << "}\n"; 
         }
     }
@@ -90,18 +162,18 @@ std::string generate_gets(std::list<std::tuple<std::string,std::string>> &attrib
 }
  
 std::string generate_sets(std::list<std::tuple<std::string,std::string>> &attributes, std::string name_class
-, bool prototype = false, bool offline = false){
+, bool prototype, bool offline){
     std::stringstream sets;
     std::string name_capitalize;
     if(prototype){ 
         for (auto attr : attributes){
             name_capitalize = std::get<1>(attr);
             name_capitalize[0] = toupper(name_capitalize[0]); // Upper Firt char
-            sets << "\tvoid set"<<name_capitalize<<"(" << std::get<0>(attr) << " " << std::get<0>(attr) <<");\n"; 
+            sets << "\tvoid set"<<name_capitalize<<"(" << std::get<0>(attr) << " " << std::get<1>(attr) <<");\n"; 
         }
     }else{ 
         std::string space = "";
-        if(!offline){ space = "\t";}
+        if(!offline){ space = "\t"; name_class = ""; }
         else { name_class += "::"; }
         for (auto attr : attributes){
             name_capitalize = std::get<1>(attr);
@@ -113,70 +185,85 @@ std::string generate_sets(std::list<std::tuple<std::string,std::string>> &attrib
     }
     return sets.str();
 }
-/*
-std::string generate_constructor(attributes, std::string name_class
-, bool prototype = false, bool overloaded = false, bool offline = false){
+
+std::string generate_constructor(std::list<std::tuple<std::string,std::string>> &attributes, std::string name_class
+, bool prototype, bool overloaded, bool offline){
     std::stringstream builder;
     if(prototype){
         builder << '\t';    
         if(overloaded){
             builder << name_class << '(';
+            int i = 0;
             for (auto attr : attributes){
                 builder << std::get<0>(attr) << ' ' <<  std::get<1>(attr) << " = ";
-                builder << ((Types[std::get<0>(attr)) != "")? Types[std::get<0>(attr)] : "nullptr" );
-                if(i < attributes.size() - 1){ builder << ", "; } 
+                builder << ((Types[std::get<0>(attr)] != "")? Types[std::get<0>(attr)] : "nullptr" );
+                if(i < attributes.size() - 1){ builder << ", "; }
+                i++; 
             }
         }else{
-            space = ""
-            if offline: space = "\t"
-            builder += name_class + "();\n" # without parameters
-            builder += space + name_class + "(" # with parameters
-            for i in range(len(attributes)):
-                builder += "%s %s" % (attributes[i][0], attributes[i][1])
-                if i < len(attributes) - 1: builder += ", "
+            std::string space = "";
+            if(offline){ space = "\t"; }
+            builder << name_class << "();\n"; // without parameters
+            builder << space << name_class << "("; // # with parameters
+            int i = 0;
+            for (auto attr : attributes){
+                builder << std::get<0>(attr) << ' ' << std::get<1>(attr);
+                if(i < attributes.size() - 1){ builder << ", "; }
+                i++;
+            }
         }
-        builder += ");\n";
+        builder << ");\n";
     }else{
-        if overloaded:
-            space = ""
-            if not offline: space = "\t"
-            builder += (name_class + "::" if offline else "\t") + name_class + "("
-            builder_body = ""
-            for i in range(len(attributes)):
-                builder += "%s %s" % (attributes[i][0], attributes[i][1])
-                if not offline: builder += " = " + (Types.get(attributes[i][0]) if Types.get(attributes[i][0]) != None else "nullptr")
-                if i < len(attributes) - 1: builder += ", "
-                builder_body += space + "\tthis->%s = %s;\n" % (attributes[i][1], attributes[i][1])
-            if not offline: builder_body += "\t"
-        else:
-            space = ""
-            if not offline: space = "\t"# builder without parameters
-            builder = (name_class + "::" if offline else "\t") + name_class + "(){\n"
-            for i in range(len(attributes)): 
-                builder += space + "\tthis->%s = %s;\n" % (attributes[i][1], (Types.get(attributes[i][0]) if Types.get(attributes[i][0]) != None else "nullptr"))
-            if not offline: builder += "\t"
-            builder +="}\n";# builder with parameters
-            builder += (name_class + "::" if offline else "\t") + name_class + "("
-            builder_body = ""
-            for i in range(len(attributes)): 
-                builder += "%s %s" % (attributes[i][0], attributes[i][1])
-                if i < len(attributes) - 1: builder += ", "
-                builder_body += space + "\tthis->%s = %s;\n" % (attributes[i][1], attributes[i][1])
-            if not offline: builder_body += "\t"
-        builder += "){\n" + builder_body + "}\n";
+        std::stringstream builder_body;
+        if(overloaded){
+            std::string space = "";
+            std::string scope = name_class;
+            if(!offline){ space = "\t"; scope = ""; }
+            else{ scope += "::"; }
+            builder << space << scope << name_class + "(";
+            int i = 0;
+            for (auto attr : attributes){
+                builder << std::get<0>(attr) << ' ' << std::get<1>(attr);
+                if(!offline){ builder << " = " << ((Types[std::get<0>(attr)] != "")? Types[std::get<0>(attr)] : "nullptr");}
+                if(i < attributes.size() - 1){ builder << ", "; }
+                builder_body << space << "\tthis->" << std::get<1>(attr) << " = " << std::get<1>(attr) << ";\n";
+                i++;
+            }
+            if(!offline){ builder_body << "\t"; }
+        }else{ 
+            std::string space = "";
+            std::string scope = name_class;
+            if(!offline){ space = "\t"; scope = "";} // builder without parameters
+            else{ scope += "::"; }
+            builder << space << name_class + "(){\n";
+            for(auto attr : attributes){
+                builder << space << "\tthis->" << std::get<1>(attr) << " = " << ((Types[std::get<0>(attr)] != "")? Types[std::get<0>(attr)] : "nullptr") << ";\n";
+            }
+            if(!offline){ builder << "\t"; }
+            builder << "}\n"; // builder with parameters
+            builder << ((offline)? scope : "\t") << name_class + "(";
+            int i = 0;
+            for(auto attr : attributes){
+                builder << std::get<0>(attr) << ' ' << std::get<1>(attr);
+                if(i < attributes.size() - 1){ builder << ", "; }
+                builder_body << space + "\tthis->" << std::get<1>(attr) << " = " << std::get<1>(attr) << ";\n";
+                i++;
+            }
+            if(!offline){ builder_body << "\t"; }
+        }
+        builder << "){\n" << builder_body.str() + "}\n";
     }
-    return builder
+    return builder.str();
 }
-*/
 
-std::string generate_destructor(std::string name_class, bool prototype = false, bool offline = false){
+std::string generate_destructor(std::string name_class, bool prototype, bool offline){
     if(prototype){
         return "\t~" + name_class + "();\n";
     } 
-    std::string space, scope = name_class;
+    std::string space = "", scope = "";
     if(!offline){ space = "\t"; }
-    else { scope += "::"; }
-    return scope + "~" + name_class + "(){\n" + space + "}\n";
+    else { scope = name_class + "::"; }
+    return space + scope + "~" + name_class + "(){\n" + space + "}\n";
     
 }
 
@@ -188,7 +275,7 @@ std::string toUpper(std::string word){
 }
 
 std::string generate_class(std::string name_class, std::list<std::tuple<std::string,std::string>> &attributes
-, bool offline = false, bool builder_overloaded = false){
+, bool offline, bool builder_overloaded){
     std::stringstream declaration;
     declaration << "#ifndef " << toUpper(name_class) << "_H\n#define " << toUpper(name_class) << "_H\n";
     declaration << checkIncludes(attributes);
@@ -219,54 +306,4 @@ std::string generate_class(std::string name_class, std::list<std::tuple<std::str
         declaration << implementation.str();
     }
     return declaration.str();
-}
-
-
-int main(int argc, char** argv){
-    std::stringstream output;
-    if(argc > 1){
-        if(std::string(argv[1]) == "--help" || std::string(argv[1]) == "-help" || std::string(argv[1]) == "-h"){ 
-            output << help();
-        }else if(std::string(argv[1]) == "--version" || std::string(argv[1]) == "-version" || std::string(argv[1]) == "-v"){
-            output << VERSION;
-        }else if(argc > 3){
-            std::list<std::tuple<std::string, std::string>> attributes;
-            for (int i = 2; i < argc; i+=2){
-                attributes.push_back(std::make_tuple(std::string(argv[i]),std::string(argv[i])));
-            }
-            output << "\nThe result of the class is as follows\n\n";
-            output << generate_class(std::string(argv[1]), attributes, true, false);
-        }else{
-            output << "Error: Not give anyone atribute for class " << argv[1];
-        }
-    }else{
-        std::cout << "Creating c++ class with console interactive";
-        std::list<std::tuple<std::string, std::string>> attributes;
-        std::string name_class;        
-        std::cout << "Name class:";
-        getline(std::cin, name_class);
-        std::string type, name, answer;
-        while(true){
-            std::cout << "Create a new variable (Y/n):";
-            getline(std::cin, answer);
-            if(answer == "n"){ break; }
-            std::cout << "Type: ";
-            getline(std::cin, type);
-            std::cout << "Name: ";
-            getline(std::cin, name);
-            attributes.push_back(std::make_tuple(type,name));
-        };
-        bool overloaded, offline;
-        std::cout << "Generate builder overloaded (Y/n):";
-        getline(std::cin, answer);
-        overloaded = answer != "n";
-
-        std::cout << "Generate class inline (Y/n):";
-        getline(std::cin, answer);
-        offline = answer != "n";
-
-        output << "\nThe result of the class is as follows\n\n";
-        output << generate_class(name_class, attributes, offline, overloaded);
-    }
-    std::cout << output.str();
 }
