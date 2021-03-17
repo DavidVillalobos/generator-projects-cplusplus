@@ -110,7 +110,7 @@ std::string help(){
     return s.str();
 }
 
-std::string displayList(std::list<std::string> &list, std::string separator = " "){
+std::string displayList(std::list<std::string> &list, std::string separator){
     std::stringstream r;
     for (auto i : list){
         r << i << separator;
