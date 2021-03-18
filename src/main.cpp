@@ -1,7 +1,7 @@
 /*
     File: main.cpp
-    Version: 2.0.0
-    Date: 17-03-2021 
+    Version: 2.0.1
+    Date: 18-03-2021 
     Author: David Villalobos
     Description: Main file contains the menu that allows 
     executing the necessary codes to create a project.
@@ -32,7 +32,7 @@ int main(){
         std::cout << "  |_|   |_|  \\___// |\\___|\\___|\\__|___/  [95m\\____||_|   |_|[92m\n";
         std::cout << "                |__/\n";
         std::cout << "   [93mAuthor: https://github.com/DavidVillalobos \n";
-        std::cout << " [95m+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - +\n";
+        std::cout << " [95m+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - +\n[0m";
         std::cout << "   1. [94mCreate Class[0m\n";
         std::cout << "   2. [94mCreate Makefile[0m\n";      
         std::cout << "   3. [94mCreate Main[0m\n";
@@ -40,8 +40,8 @@ int main(){
         std::cout << " [95m+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - +\n";
         std::cout << "   [0mEnter an option : ";
         switch(read_option()){
-            case 1: system("cd build & genclassc++"); break;
-            case 2: system("cd build & genmakec++"); break;
+            case 1: system("genclassc++"); break;
+            case 2: system("genmakec++"); break;
             case 3: generate_main(); break;
             case 4: return 0;
             default: std::cout << "Option wrong."; break;
@@ -81,5 +81,4 @@ void generate_main(){
     file << "}\n";
     file.close();
     std::cout << "Your file is ready -> " + path + '\n';
-    system("pause");
 }

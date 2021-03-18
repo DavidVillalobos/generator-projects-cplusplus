@@ -1,7 +1,7 @@
 /*
     File: generateMakefiles.cpp
-    Version: 2.0.0
-    Date: 16-03-2021 
+    Version: 2.0.1
+    Date: 18-03-2021 
     Author: David Villalobos
     Description: With this file you can 
     generate makefiles for build C++ projects
@@ -51,13 +51,14 @@ int main(int argc, char** argv){
         std::cout << "Name Main: ";
         std::string main;
         getline(std::cin, main);
+		if(main.empty()) { main = "main"; }
         if (main.find(".cpp") != std::string::npos) {
             main = main.substr(0, main.length() - 4);
         }
-        std::cout << "Name Main is " << main << std::endl;
         std::cout << "Name Out: ";
         std::string out;
         getline(std::cin, out);
+		if(out.empty()) { out = "main"; }
         if (out.find(".exe") != std::string::npos) {
             out = out.substr(0, out.length() - 4);
         }
