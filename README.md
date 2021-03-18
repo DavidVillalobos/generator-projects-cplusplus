@@ -5,6 +5,8 @@ allowing classes to be created quickly. Only attributes are needed to implement 
 and basic methods of the classes, methods such as constructors, getter and setter.  
 This project was created with c++.
 
+<img src="demo/mainmenu.png" width="550">  
+
 ### Pre-requirements 📋
 
 * 	[g++](https://osdn.net/projects/mingw/releases/) 
@@ -19,15 +21,25 @@ build
 ```
 ## Usage  
 
-For use, after build the project, Run the file run.bat
-or open the terminal in project folder and execute the following command:  
+For use, after build the project, Run the file run.bat or open terminal in project folder and execute the following command:  
 ~~~cmd
 cd build
 genc++
 ~~~
-Now enter an option and create your project :D
+Now enter an option and create your project :D  
+See how to use it with the following demos 
+## Create a classes
+<img src="demo/genclass.gif">  
 
-<img src="demo/mainmenu.png" width="500">  
+## Create a main
+<img src="demo/genmain.gif">  
+
+## Create a Makefile
+<img src="demo/genmakefile.gif">  
+
+## Result
+Finally, the idea is that projects can be implemented in c ++ more quickly 
+<img src="demo/result.gif"> 
 
 ## Author
 
