@@ -1,9 +1,13 @@
 @ECHO OFF
 REM File: run.bat
-REM Version: 1.0.0
-REM Date: 17-03-2021 
+REM Version: 2.0.0
+REM Date: 18-03-2021 
 REM Author: David Villalobos
-REM Description: start project
+REM Description: run project and build if not exist
 
-IF NOT EXIST build ( build )
-start build/genc++
+IF NOT EXIST build ( build ) 
+
+cd build
+REM start program
+genc++
+cd ..
