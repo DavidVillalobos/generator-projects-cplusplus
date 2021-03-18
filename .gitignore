@@ -1,2 +1,5 @@
 
 .vscode
+build/genc++.exe
+build/genclassc++.exe
+build/genmakec++.exe
