@@ -1,6 +1,6 @@
 /*
-    File: generateMakefiles.cpp
-    Version: 2.0.1
+    File: makefile_generator.cpp
+    Version: 2.0.2
     Date: 18-03-2021 
     Author: David Villalobos
     Description: With this file you can 
