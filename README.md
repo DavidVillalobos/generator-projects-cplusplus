@@ -13,8 +13,9 @@ This project was created with c++.
 ## Installation
 ### Release
 
-Download the code available in the releases.  
-Unzip and run the GenC++.exe file  
+Download the code available in [releases](https://github.com/DavidVillalobos/generator-projects-cplusplus/releases/tag/v1.0)   
+
+Unzip the file in the space where you want and for use run the GenC++.exe file    
 
 ### Last version  
 
