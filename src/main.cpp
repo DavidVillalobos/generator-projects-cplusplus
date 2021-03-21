@@ -1,6 +1,6 @@
 /*
     File: main.cpp
-    Version: 2.0.1
+    Version: 2.0.2
     Date: 18-03-2021 
     Author: David Villalobos
     Description: Main file contains the menu that allows 
