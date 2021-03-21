@@ -1,7 +1,7 @@
 /* 
-    File: generateClass.py
-    Version: 2.0.0
-    Date: 16-03-2021 
+    File: class_generator.cpp
+    Version: 2.1.1
+    Date: 21-03-2021 
     Author: David Villalobos
     Description: With this file you can 
     generate c++ classes implementing 
@@ -10,6 +10,7 @@
     You can use it from the console 
     by sending arguments and the interactive console
 */
+
 #include<iostream>
 #include<map>
 #include<fstream>
@@ -41,6 +42,9 @@ std::string generate_constructor(std::list<std::tuple<std::string,std::string>> 
 , bool prototype = false, bool overloaded = false, bool offline = false);
 
 std::string generate_destructor(std::string name_class, bool prototype = false, bool offline = false);
+
+std::string generate_to_string(std::list<std::tuple<std::string,std::string>> &attributes, std::string name_class
+, bool prototype = false, bool offline = false);
 
 std::string toUpper(std::string word);
 
@@ -96,7 +100,6 @@ int main(int argc, char** argv){
     std::cout << output.str();
 }
 
-
 std::string help(){
     std::stringstream s;
     s << "[Generator of classes for C++]";
@@ -113,17 +116,13 @@ std::string checkIncludes(std::list<std::tuple<std::string,std::string>> &attrib
     std::stringstream includes;
     bool using_string = false;
     std::string type;
+    includes << "#include<sstream>\nusing namespace std;\n\n";
     for(auto attr : attributes){
         type = std::get<0>(attr);
-        if (type == "string" || type == "std::string"){ 
-            using_string = true;
-        } else if(Types[type] == ""){  // attribute as c++ class 
+        if(Types[type] == ""){  // attribute as c++ class 
             type.erase(remove(type.begin(), type.end(),'*'),type.end()); 
             includes << "#include\"" + type + "\"\n";
         }  
-    }
-    if(using_string){
-        includes << "#include<string>\nusing namespace std;\n";
     }
     return includes.str();
 }
@@ -267,6 +266,31 @@ std::string generate_destructor(std::string name_class, bool prototype, bool off
     
 }
 
+std::string generate_to_string(std::list<std::tuple<std::string,std::string>> &attributes, std::string name_class, bool prototype, bool offline){
+    std::stringstream builder;
+    if(prototype && offline){
+        builder << "\tstring toString();\n";
+    }else{
+        std::string scope = name_class + "::";
+        std::string space = "";
+        std::string name_capitalize;
+        if(!offline){ // if is inline
+            scope = "";
+            space = '\t';
+        }
+        builder << space << "string " << scope << "toString(){\n";
+        builder << space << "\tstringstream s;\n";
+        for(auto attr : attributes){
+            name_capitalize = std::get<1>(attr);
+            name_capitalize[0] = toupper(name_capitalize[0]);
+            builder << space << "\ts << \"" << name_capitalize << ": \" << " << std::get<1>(attr) << " << endl;\n";
+        } 
+        builder << space << "\treturn s.str();\n";
+        builder << space << "}\n";
+    }
+    return builder.str();
+}
+
 std::string toUpper(std::string word){
     for (int i = 0; i < int(word.length()); i++){
         word[i] = toupper(word[i]);
@@ -286,6 +310,7 @@ std::string generate_class(std::string name_class, std::list<std::tuple<std::str
     declaration << generate_constructor(attributes, name_class, offline, builder_overloaded, offline);
     declaration << generate_gets(attributes, name_class, offline, offline);
     declaration << generate_sets(attributes, name_class, offline, offline);
+    declaration << generate_to_string(attributes, name_class, offline, offline);
     declaration << generate_destructor(name_class, offline, offline);
     declaration << "};\n";
     declaration << "#endif //!" << toUpper(name_class) << "_H \n\n";
@@ -297,9 +322,10 @@ std::string generate_class(std::string name_class, std::list<std::tuple<std::str
         std::stringstream implementation;
         implementation << "#include\"" << name_class << ".h\"\n\n";
         implementation << generate_constructor(attributes, name_class, false, builder_overloaded, true);
-        implementation << generate_gets(attributes, name_class, false, offline);
-        implementation << generate_sets(attributes, name_class, false, offline);
-        implementation << generate_destructor(name_class, false, offline);
+        implementation << generate_gets(attributes, name_class, false, true);
+        implementation << generate_sets(attributes, name_class, false, true);
+        implementation << generate_to_string(attributes, name_class, false, true);
+        implementation << generate_destructor(name_class, false, true);
         std::ofstream cpp_file(path + ".cpp");
         cpp_file << implementation.str();
         cpp_file.close();
